@@ -1,0 +1,54 @@
+syntax = "v1"
+
+type Request {
+	Name string `path:"name,options=you|me"`
+}
+
+type Response {
+	Message string `json:"message"`
+}
+
+type (
+	ManagerLoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	ManagerLoginResp {
+		Token string   `json:"token"`
+		Menus []string `json:"menus"`
+	}
+)
+
+type (
+	ManagerListReq  {}
+	ManagerListResp  {}
+	ManagerAddReq  {}
+	ManagerAddResp  {}
+)
+
+type (
+	ManagerRoleListReq  {}
+	ManagerRoleListResp  {}
+	ManagerRoleAddReq  {}
+	ManagerRoleAddResp  {}
+)
+
+service backend-api {
+	@handler ManagerLogin
+	get /login (ManagerLoginReq) returns (ManagerLoginResp)
+}
+
+@server (
+	group: system
+)
+service backend-api {
+	@handler BackendHandler
+	get /from/:name (Request) returns (Response)
+
+	@handler ManagerList
+	get /mangerList (ManagerListReq) returns (ManagerListResp)
+
+	@handler ManagerRoleList
+	get /mangerRoleList (ManagerRoleListReq) returns (ManagerRoleListResp)
+}
+
