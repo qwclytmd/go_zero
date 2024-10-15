@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"errors"
+	"golang.org/x/crypto/bcrypt"
+	"next.com/next/models"
 
 	"next.com/next/backend/internal/svc"
 	"next.com/next/backend/internal/types"
@@ -24,7 +27,15 @@ func NewManagerLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Mana
 }
 
 func (l *ManagerLoginLogic) ManagerLogin(req *types.ManagerLoginReq) (resp *types.ManagerLoginResp, err error) {
-	// todo: add your logic here and delete this line
+
+	manager := models.Managers{}
+	if err = l.svcCtx.DB.Model(&models.Managers{}).Where("username = ?", req.Username).First(&manager).Error; err != nil {
+		return nil, errors.New("用户名或密码错误")
+	}
+
+	if bcrypt.CompareHashAndPassword([]byte(manager.Password), []byte(req.Password)) != nil {
+		return nil, errors.New("用户名或密码错误")
+	}
 
 	return
 }

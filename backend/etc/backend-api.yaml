@@ -1,3 +1,10 @@
 Name: backend-api
 Host: 0.0.0.0
 Port: 8888
+
+Auth:
+  AccessSecret: "123456"
+  AccessExpire: 86400
+
+MySQL:
+  DSN: root:123456@tcp(127.0.0.1:3306)/slots?charset=utf8&parseTime=True&loc=Local

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-
 	"next.com/next/backend/internal/svc"
 	"next.com/next/backend/internal/types"
 
