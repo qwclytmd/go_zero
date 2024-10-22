@@ -35,12 +35,12 @@ type (
 
 service backend-api {
 	@handler ManagerLogin
-	get /login (ManagerLoginReq) returns (ManagerLoginResp)
+	post /login (ManagerLoginReq) returns (ManagerLoginResp)
 }
 
 @server (
 	group: system
-	jwt: Auth
+	jwt:   Auth
 )
 service backend-api {
 	@handler BackendHandler

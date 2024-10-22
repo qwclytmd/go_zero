@@ -1,4 +1,4 @@
-package Response
+package response
 
 import (
 	"github.com/zeromicro/go-zero/rest/httpx"

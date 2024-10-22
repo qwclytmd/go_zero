@@ -3,7 +3,7 @@ package svc
 import (
 	"gorm.io/gorm"
 	"next.com/next/backend/internal/config"
-	"next.com/next/common/mysql"
+	"next.com/next/package/mysql"
 )
 
 type ServiceContext struct {
