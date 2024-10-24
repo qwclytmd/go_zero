@@ -3,10 +3,26 @@
 
 package types
 
+type LoginReq struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type LoginResp struct {
+	Token string   `json:"token"`
+	Menus []string `json:"menus"`
+}
+
 type ManagerAddReq struct {
 }
 
 type ManagerAddResp struct {
+}
+
+type ManagerDeleteReq struct {
+}
+
+type ManagerDeleteResp struct {
 }
 
 type ManagerListReq struct {
@@ -15,32 +31,32 @@ type ManagerListReq struct {
 type ManagerListResp struct {
 }
 
-type ManagerLoginReq struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+type ManagerUpdateReq struct {
 }
 
-type ManagerLoginResp struct {
-	Token string   `json:"token"`
-	Menus []string `json:"menus"`
+type ManagerUpdateResp struct {
 }
 
-type ManagerRoleAddReq struct {
+type RoleAddReq struct {
 }
 
-type ManagerRoleAddResp struct {
+type RoleAddResp struct {
 }
 
-type ManagerRoleListReq struct {
+type RoleDeleteReq struct {
 }
 
-type ManagerRoleListResp struct {
+type RoleDeleteResp struct {
 }
 
-type Request struct {
-	Name string `path:"name,options=you|me"`
+type RoleListReq struct {
 }
 
-type Response struct {
-	Message string `json:"message"`
+type RoleListResp struct {
+}
+
+type RoleUpdateReq struct {
+}
+
+type RoleUpdateResp struct {
 }

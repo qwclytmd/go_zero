@@ -1,19 +1,11 @@
 syntax = "v1"
 
-type Request {
-	Name string `path:"name,options=you|me"`
-}
-
-type Response {
-	Message string `json:"message"`
-}
-
 type (
-	ManagerLoginReq {
+	LoginReq {
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}
-	ManagerLoginResp {
+	LoginResp {
 		Token string   `json:"token"`
 		Menus []string `json:"menus"`
 	}
@@ -24,32 +16,64 @@ type (
 	ManagerListResp  {}
 	ManagerAddReq  {}
 	ManagerAddResp  {}
+	ManagerUpdateReq  {}
+	ManagerUpdateResp  {}
+	ManagerDeleteReq  {}
+	ManagerDeleteResp  {}
 )
 
 type (
-	ManagerRoleListReq  {}
-	ManagerRoleListResp  {}
-	ManagerRoleAddReq  {}
-	ManagerRoleAddResp  {}
+	RoleListReq  {}
+	RoleListResp  {}
+	RoleAddReq  {}
+	RoleAddResp  {}
+	RoleUpdateReq  {}
+	RoleUpdateResp  {}
+	RoleDeleteReq  {}
+	RoleDeleteResp  {}
 )
 
+@server (
+	group: auth
+)
 service backend-api {
-	@handler ManagerLogin
-	post /login (ManagerLoginReq) returns (ManagerLoginResp)
+	@handler Login
+	post /login (LoginReq) returns (LoginResp)
 }
 
 @server (
-	group: system
+	group: system/managers
 	jwt:   Auth
 )
 service backend-api {
-	@handler BackendHandler
-	get /from/:name (Request) returns (Response)
+	@handler Managers
+	get /manager/list (ManagerListReq) returns (ManagerListResp)
 
-	@handler ManagerList
-	get /mangerList (ManagerListReq) returns (ManagerListResp)
+	@handler ManagerAdd
+	get /Manager/add (ManagerAddReq) returns (ManagerAddResp)
 
-	@handler ManagerRoleList
-	get /mangerRoleList (ManagerRoleListReq) returns (ManagerRoleListResp)
+	@handler ManagerUpdate
+	get /Manager/update (ManagerUpdateReq) returns (ManagerUpdateResp)
+
+	@handler ManagerDelete
+	get /Manager/delete (ManagerDeleteReq) returns (ManagerDeleteResp)
+}
+
+@server (
+	group: system/roles
+	jwt:   Auth
+)
+service backend-api {
+	@handler ManagersRoleList
+	get /role/list (RoleListReq) returns (RoleAddResp)
+
+	@handler RoleAdd
+	get /role/add (RoleAddReq) returns (RoleAddResp)
+
+	@handler RoleUpdate
+	get /role/update (RoleUpdateReq) returns (RoleUpdateResp)
+
+	@handler RoleDelete
+	get /role/delete (RoleDeleteReq) returns (RoleDeleteResp)
 }
 

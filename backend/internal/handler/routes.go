@@ -6,7 +6,9 @@ package handler
 import (
 	"net/http"
 
-	system "next.com/next/backend/internal/handler/system"
+	auth "next.com/next/backend/internal/handler/auth"
+	systemmanagers "next.com/next/backend/internal/handler/system/managers"
+	systemroles "next.com/next/backend/internal/handler/system/roles"
 	"next.com/next/backend/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -18,7 +20,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/login",
-				Handler: ManagerLoginHandler(serverCtx),
+				Handler: auth.LoginHandler(serverCtx),
 			},
 		},
 	)
@@ -27,18 +29,49 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/from/:name",
-				Handler: system.BackendHandler(serverCtx),
+				Path:    "/Manager/add",
+				Handler: systemmanagers.ManagerAddHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/mangerList",
-				Handler: system.ManagerListHandler(serverCtx),
+				Path:    "/Manager/delete",
+				Handler: systemmanagers.ManagerDeleteHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,
-				Path:    "/mangerRoleList",
-				Handler: system.ManagerRoleListHandler(serverCtx),
+				Path:    "/Manager/update",
+				Handler: systemmanagers.ManagerUpdateHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/manager/list",
+				Handler: systemmanagers.ManagersHandler(serverCtx),
+			},
+		},
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodGet,
+				Path:    "/role/add",
+				Handler: systemroles.RoleAddHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/role/delete",
+				Handler: systemroles.RoleDeleteHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/role/list",
+				Handler: systemroles.ManagersRoleListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/role/update",
+				Handler: systemroles.RoleUpdateHandler(serverCtx),
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
