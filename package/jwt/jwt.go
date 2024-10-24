@@ -7,7 +7,7 @@ import (
 )
 
 type Payload struct {
-	UserID   uint   `json:"userId"`
+	UserId   uint   `json:"user_id"`
 	UserName string `json:"username"`
 }
 
@@ -27,7 +27,7 @@ func GenToken(user Payload, accessSecret string, expires int64) (string, error) 
 	return token.SignedString([]byte(accessSecret))
 }
 
-func ParseToken(tokenStr string, accessSecret string, expires uint32) (*CustomClaims, error) {
+func ParseToken(tokenStr string, accessSecret string) (*CustomClaims, error) {
 	token, err := jwt.ParseWithClaims(tokenStr, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(accessSecret), nil
 	})
