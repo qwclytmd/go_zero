@@ -1,13 +1,15 @@
 package mysql
 
 import (
+	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/plugin/dbresolver"
+	"log"
 	"time"
 )
 
-func Connection(dsn string) (*gorm.DB, error) {
+func Connection(dsn string, tables map[string]any) *gorm.DB {
 	db, err := gorm.Open(mysql.New(mysql.Config{
 		DSN:                       dsn,   // DSN data source name
 		DefaultStringSize:         256,   // string 类型字段的默认长度
@@ -25,8 +27,15 @@ func Connection(dsn string) (*gorm.DB, error) {
 			SetMaxOpenConns(200),
 	)
 	if err != nil {
-		return nil, err
+		log.Panicf("连接数据库失败: %v", err)
 	}
 
-	return db, err
+	//迁移
+	for comment, table := range tables {
+		if err = db.Set("gorm:table_options", fmt.Sprintf("COMMENT='%s'", comment)).AutoMigrate(&table); err != nil {
+			log.Panicf("迁移据表失败: %v", err)
+		}
+	}
+
+	return db
 }

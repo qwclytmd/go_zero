@@ -13,6 +13,6 @@ type Config struct {
 	}
 
 	MySQL struct {
-		DSN string
+		Backend string
 	}
 }

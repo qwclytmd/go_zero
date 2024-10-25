@@ -3,28 +3,23 @@ package svc
 import (
 	"gorm.io/gorm"
 	"next.com/next/backend/internal/config"
+	"next.com/next/models"
 	"next.com/next/package/mysql"
 )
 
 type ServiceContext struct {
-	Config config.Config
-	DB     *gorm.DB
+	Config    config.Config
+	BackendDB *gorm.DB
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 
+	backendTables := map[string]any{
+		"后台管理员": models.Managers{},
+	}
+
 	return &ServiceContext{
-		Config: c,
-		DB:     GetMySQLConn(c),
+		Config:    c,
+		BackendDB: mysql.Connection(c.MySQL.Backend, backendTables),
 	}
-}
-
-// 数据库连接
-func GetMySQLConn(c config.Config) *gorm.DB {
-	db, err := mysql.Connection(c.MySQL.DSN)
-	if err != nil {
-		panic(err)
-	}
-
-	return db
 }
