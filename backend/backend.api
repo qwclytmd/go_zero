@@ -1,5 +1,10 @@
 syntax = "v1"
 
+type PaginateReq {
+	Page int `json:"page"`
+	Size int `json:"size"`
+}
+
 type (
 	LoginReq {
 		Username string `json:"username"`
@@ -12,7 +17,9 @@ type (
 )
 
 type (
-	ManagerListReq  {}
+	ManagerListReq {
+		PaginateReq
+	}
 	ManagerListResp  {}
 	ManagerAddReq  {}
 	ManagerAddResp  {}
@@ -42,11 +49,12 @@ service backend-api {
 }
 
 @server (
-	group: system/managers
-	jwt:   Auth
+	group:      system/managers
+	jwt:        Auth
+	middleware: CorsMiddleware
 )
 service backend-api {
-	@handler Managers
+	@handler ManagerList
 	get /manager/list (ManagerListReq) returns (ManagerListResp)
 
 	@handler ManagerAdd
@@ -60,11 +68,12 @@ service backend-api {
 }
 
 @server (
-	group: system/roles
-	jwt:   Auth
+	group:      system/roles
+	jwt:        Auth
+	middleware: CorsMiddleware
 )
 service backend-api {
-	@handler ManagersRoleList
+	@handler RoleList
 	get /role/list (RoleListReq) returns (RoleAddResp)
 
 	@handler RoleAdd

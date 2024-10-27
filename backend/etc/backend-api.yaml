@@ -1,10 +1,3 @@
 Name: backend-api
 Host: 0.0.0.0
 Port: 8888
-
-Auth:
-  AccessSecret: "12345678"
-  AccessExpire: 86400
-
-MySQL:
-  Backend: game:123456@tcp(192.168.0.129:3306)/slots?charset=utf8&parseTime=True&loc=Local

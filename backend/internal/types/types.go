@@ -26,6 +26,7 @@ type ManagerDeleteResp struct {
 }
 
 type ManagerListReq struct {
+	PaginateReq
 }
 
 type ManagerListResp struct {
@@ -35,6 +36,11 @@ type ManagerUpdateReq struct {
 }
 
 type ManagerUpdateResp struct {
+}
+
+type PaginateReq struct {
+	Page int `json:"page"`
+	Size int `json:"size"`
 }
 
 type RoleAddReq struct {

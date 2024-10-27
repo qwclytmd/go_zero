@@ -26,54 +26,60 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	)
 
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodGet,
-				Path:    "/Manager/add",
-				Handler: systemmanagers.ManagerAddHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/Manager/delete",
-				Handler: systemmanagers.ManagerDeleteHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/Manager/update",
-				Handler: systemmanagers.ManagerUpdateHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/manager/list",
-				Handler: systemmanagers.ManagersHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.CorsMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/Manager/add",
+					Handler: systemmanagers.ManagerAddHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/Manager/delete",
+					Handler: systemmanagers.ManagerDeleteHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/Manager/update",
+					Handler: systemmanagers.ManagerUpdateHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/manager/list",
+					Handler: systemmanagers.ManagerListHandler(serverCtx),
+				},
+			}...,
+		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodGet,
-				Path:    "/role/add",
-				Handler: systemroles.RoleAddHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/role/delete",
-				Handler: systemroles.RoleDeleteHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/role/list",
-				Handler: systemroles.ManagersRoleListHandler(serverCtx),
-			},
-			{
-				Method:  http.MethodGet,
-				Path:    "/role/update",
-				Handler: systemroles.RoleUpdateHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.CorsMiddleware},
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/role/add",
+					Handler: systemroles.RoleAddHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/role/delete",
+					Handler: systemroles.RoleDeleteHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/role/list",
+					Handler: systemroles.RoleListHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/role/update",
+					Handler: systemroles.RoleUpdateHandler(serverCtx),
+				},
+			}...,
+		),
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
 	)
 }

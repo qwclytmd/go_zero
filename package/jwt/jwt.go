@@ -7,7 +7,7 @@ import (
 )
 
 type Payload struct {
-	UserId   uint   `json:"user_id"`
+	UserId   int64  `json:"user_id"`
 	UserName string `json:"username"`
 }
 
@@ -16,7 +16,7 @@ type CustomClaims struct {
 	jwt.RegisteredClaims
 }
 
-func GenToken(user Payload, accessSecret string, expires int64) (string, error) {
+func CreateToken(user Payload, accessSecret string, expires int64) (string, error) {
 	claims := CustomClaims{
 		Payload: user,
 		RegisteredClaims: jwt.RegisteredClaims{
