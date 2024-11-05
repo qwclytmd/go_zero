@@ -5,45 +5,76 @@ type PaginateReq {
 	Size int `json:"size"`
 }
 
+type NilMessage {}
+
 type (
 	LoginReq {
 		Username string `json:"username"`
 		Password string `json:"password"`
 	}
 	LoginResp {
-		Token string   `json:"token"`
-		Menus []string `json:"menus"`
+		Token string      `json:"token"`
+		Menus interface{} `json:"menus"`
 	}
 )
 
 type (
 	ManagerListReq {
+		Username string `json:"username"`
+		RoleName string `json:"role_name"`
 		PaginateReq
 	}
-	ManagerListResp  {}
-	ManagerAddReq  {}
-	ManagerAddResp  {}
-	ManagerUpdateReq  {}
-	ManagerUpdateResp  {}
-	ManagerDeleteReq  {}
-	ManagerDeleteResp  {}
+	ManagerListResp {
+		Total int         `json:"total"`
+		Data  interface{} `json:"data"`
+	}
+	ManagerAddReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		RoleId   int64  `json:"role_id"`
+		Status   int    `json:"status"`
+	}
+	ManagerUpdateReq {
+		Id       int64  `json:"id"`
+		Username string `json:"username"`
+		Password string `json:"password"`
+		RoleId   int64  `json:"role_id"`
+		Status   int    `json:"status,range=[1:2]"`
+	}
+	ManagerDeleteReq {
+		Id int64 `json:"id"`
+	}
 )
 
 type (
-	RoleListReq  {}
-	RoleListResp  {}
-	RoleAddReq  {}
-	RoleAddResp  {}
-	RoleUpdateReq  {}
-	RoleUpdateResp  {}
-	RoleDeleteReq  {}
-	RoleDeleteResp  {}
+	RoleListReq {
+		Name string `json:"name"`
+		PaginateReq
+	}
+	RoleListResp {
+		Total int         `json:"total"`
+		Data  interface{} `json:"data"`
+	}
+	RoleAddReq {
+		Name       string `json:"name"`
+		Permission string `json:"permission"`
+		Status     int    `json:"status"`
+	}
+	RoleUpdateReq {
+		Id         int64  `json:"id"`
+		Name       string `json:"name"`
+		Permission string `json:"permission"`
+		Status     int    `json:"status"`
+	}
+	RoleDeleteReq {
+		Id int64 `json:"id"`
+	}
 )
 
 @server (
 	group: auth
 )
-service backend-api {
+service backend {
 	@handler Login
 	post /login (LoginReq) returns (LoginResp)
 }
@@ -53,18 +84,18 @@ service backend-api {
 	jwt:        Auth
 	middleware: CorsMiddleware
 )
-service backend-api {
+service backend {
 	@handler ManagerList
-	get /manager/list (ManagerListReq) returns (ManagerListResp)
+	post /manager/list (ManagerListReq) returns (ManagerListResp)
 
 	@handler ManagerAdd
-	get /Manager/add (ManagerAddReq) returns (ManagerAddResp)
+	post /manager/add (ManagerAddReq) returns (NilMessage)
 
 	@handler ManagerUpdate
-	get /Manager/update (ManagerUpdateReq) returns (ManagerUpdateResp)
+	post /manager/update (ManagerUpdateReq) returns (NilMessage)
 
 	@handler ManagerDelete
-	get /Manager/delete (ManagerDeleteReq) returns (ManagerDeleteResp)
+	post /manager/delete (ManagerDeleteReq) returns (NilMessage)
 }
 
 @server (
@@ -72,17 +103,17 @@ service backend-api {
 	jwt:        Auth
 	middleware: CorsMiddleware
 )
-service backend-api {
+service backend {
 	@handler RoleList
-	get /role/list (RoleListReq) returns (RoleAddResp)
+	post /role/list (RoleListReq) returns (RoleListResp)
 
 	@handler RoleAdd
-	get /role/add (RoleAddReq) returns (RoleAddResp)
+	post /role/add (RoleAddReq) returns (NilMessage)
 
 	@handler RoleUpdate
-	get /role/update (RoleUpdateReq) returns (RoleUpdateResp)
+	post /role/update (RoleUpdateReq) returns (NilMessage)
 
 	@handler RoleDelete
-	get /role/delete (RoleDeleteReq) returns (RoleDeleteResp)
+	post /role/delete (RoleDeleteReq) returns (NilMessage)
 }
 
